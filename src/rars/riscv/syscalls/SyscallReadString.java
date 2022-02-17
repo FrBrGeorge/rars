@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
@@ -53,7 +53,7 @@ public class SyscallReadString extends AbstractSyscall {
                 "a0 = address of input buffer<br>a1 = maximum number of characters to read", "N/A");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         String inputString = "";
         int buf = RegisterFile.getValue("a0"); // buf addr
         int maxLength = RegisterFile.getValue("a1") - 1;
@@ -79,7 +79,7 @@ public class SyscallReadString extends AbstractSyscall {
             }
             if (addNullByte) Globals.memory.setByte(buf + stringLength, 0);
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
     }
 }

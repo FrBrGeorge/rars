@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.riscv.hardware.RegisterFile;
@@ -42,7 +42,7 @@ public class SyscallConfirmDialog extends AbstractSyscall {
                 "a0 = Yes (0), No (1), or Cancel(2)");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         String message = NullString.get(statement);
         int result = JOptionPane.showConfirmDialog(null, message);
         if (result == JOptionPane.CLOSED_OPTION) {

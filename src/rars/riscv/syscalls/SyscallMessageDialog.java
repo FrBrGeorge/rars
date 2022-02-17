@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.riscv.hardware.RegisterFile;
@@ -43,7 +43,7 @@ public class SyscallMessageDialog extends AbstractSyscall {
                         "0: error message <br>1: information message <br>2: warning message <br>3: question message <br>other: plain message", "N/A");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         // Display the dialog.
         int msgType = RegisterFile.getValue("a1");
         if (msgType < 0 || msgType > 3)

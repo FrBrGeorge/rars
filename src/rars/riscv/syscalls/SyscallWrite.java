@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
@@ -49,7 +49,7 @@ public class SyscallWrite extends AbstractSyscall {
                 "a0 = the number of charcters written");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         int byteAddress = RegisterFile.getValue("a1"); // source of characters to write to file
         int reqLength = RegisterFile.getValue("a2"); // user-requested length
         if (reqLength < 0) {
@@ -67,7 +67,7 @@ public class SyscallWrite extends AbstractSyscall {
                 b = (byte) Globals.memory.getByte(byteAddress);
             }
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
         int retValue = SystemIO.writeToFile(
                 RegisterFile.getValue("a0"), // fd

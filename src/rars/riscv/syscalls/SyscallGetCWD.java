@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
@@ -43,7 +43,7 @@ public class SyscallGetCWD extends AbstractSyscall {
                 "a0 = -1 if the path is longer than the buffer");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         String path = System.getProperty("user.dir");
         int buf = RegisterFile.getValue("a0");
         int length = RegisterFile.getValue("a1");
@@ -62,7 +62,7 @@ public class SyscallGetCWD extends AbstractSyscall {
             }
             Globals.memory.setByte(buf + utf8BytesList.length, 0);
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
     }
 }

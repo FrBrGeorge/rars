@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.hardware.AddressErrorException;
@@ -45,7 +45,7 @@ public class NullString {
     /**
      * Just a wrapper around #String get(ProgramStatement, String) which passes in the default "a0"
      */
-    public static String get(ProgramStatement statement) throws ExitingException {
+    public static String get(ProgramStatement statement) throws SimulationException {
         return get(statement, "a0");
     }
 
@@ -55,9 +55,9 @@ public class NullString {
      * @param statement the program statement this was called from (used for error handling)
      * @param reg       The name of the register for the address of the string
      * @return the string read from memory
-     * @throws ExitingException if it hits a #AddressErrorException
+     * @throws SimulationException if it hits a #AddressErrorException
      */
-    public static String get(ProgramStatement statement, String reg) throws ExitingException {
+    public static String get(ProgramStatement statement, String reg) throws SimulationException {
         int byteAddress = RegisterFile.getValue(reg);
         ArrayList<Byte> utf8BytesList = new ArrayList<>(); // Need an array to hold bytes
         try {
@@ -68,7 +68,7 @@ public class NullString {
                 utf8BytesList.add((byte) Globals.memory.getByte(byteAddress));
             }
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
 
         int size = utf8BytesList.size() - 1;    //size - 1 so we dont include the null terminator in the utf8Bytes array

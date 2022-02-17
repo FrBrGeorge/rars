@@ -1,6 +1,6 @@
 package rars.riscv;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -137,7 +137,7 @@ public abstract class AbstractSyscall implements Comparable<AbstractSyscall> {
      * @param statement ProgramStatement object for this syscall instruction.
      */
     public abstract void simulate(ProgramStatement statement)
-            throws ExitingException;
+            throws SimulationException;
 
     public int compareTo(AbstractSyscall other) {
         if (this == other) return 0;

@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.hardware.AddressErrorException;
@@ -62,7 +62,7 @@ public class SyscallInputDialogString extends AbstractSyscall {
                         "-3: OK was chosen but no data had been input into field. No change to buffer.<br>-4: length of the input string exceeded the specified maximum. Buffer contains the maximum allowable input string terminated with null.");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         String message = NullString.get(statement);
 
         // Values returned by Java's InputDialog:
@@ -106,7 +106,7 @@ public class SyscallInputDialogString extends AbstractSyscall {
 
         } // end try
         catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
 
 

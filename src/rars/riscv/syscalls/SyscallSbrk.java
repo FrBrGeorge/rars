@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
@@ -40,12 +40,12 @@ public class SyscallSbrk extends AbstractSyscall {
     }
 
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         try {
             RegisterFile.updateRegister("a0", Globals.memory.allocateBytesFromHeap(RegisterFile.getValue("a0")));
         } catch (IllegalArgumentException iae) {
-            throw new ExitingException(statement,
-                    iae.getMessage() + " (syscall " + this.getNumber() + ")");
+            throw new SimulationException(statement,
+                    iae.getMessage() + " (syscall " + this.getNumber() + ")", SimulationException.ENVIRONMENT_CALL);
         }
     }
 }

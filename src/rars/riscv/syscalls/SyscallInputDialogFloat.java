@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.hardware.FloatingPointRegisterFile;
 import rars.riscv.hardware.RegisterFile;
@@ -54,7 +54,7 @@ public class SyscallInputDialogFloat extends AbstractSyscall {
         super("InputDialogFloat");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         String message = NullString.get(statement);
 
         // Values returned by Java's InputDialog:

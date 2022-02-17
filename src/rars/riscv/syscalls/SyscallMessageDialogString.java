@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 
@@ -41,7 +41,7 @@ public class SyscallMessageDialogString extends AbstractSyscall {
                         "a1 = address of the second string to display", "N/A");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         // Display the dialog.
         JOptionPane.showMessageDialog(null,
                 NullString.get(statement) + NullString.get(statement, "a1"),

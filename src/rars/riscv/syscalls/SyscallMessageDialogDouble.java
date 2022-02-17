@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.hardware.AddressErrorException;
@@ -54,7 +54,7 @@ public class SyscallMessageDialogDouble extends AbstractSyscall {
     /**
      * System call to display a message to user.
      */
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         // TODO: maybe refactor this, other null strings are handled in a central place now
         String message = new String(); // = "";
         int byteAddress = RegisterFile.getValue("a0");
@@ -68,7 +68,7 @@ public class SyscallMessageDialogDouble extends AbstractSyscall {
                 ch[0] = (char) Globals.memory.getByte(byteAddress);
             }
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
 
         JOptionPane.showMessageDialog(null,

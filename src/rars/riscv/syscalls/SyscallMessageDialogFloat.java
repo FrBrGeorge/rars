@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.riscv.hardware.FloatingPointRegisterFile;
@@ -42,7 +42,7 @@ public class SyscallMessageDialogFloat extends AbstractSyscall {
                         "fa1 = the float to display", "N/A");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         String message = NullString.get(statement);
 
         // Display the dialog.

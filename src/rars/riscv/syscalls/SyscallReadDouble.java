@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.hardware.FloatingPointRegisterFile;
 import rars.riscv.AbstractSyscall;
@@ -52,13 +52,13 @@ public class SyscallReadDouble extends AbstractSyscall {
     /**
      * Performs syscall function to read the bits of input double into $f0 and $f1.
      */
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         double doubleValue = 0;
         try {
             doubleValue = SystemIO.readDouble(this.getNumber());
         } catch (NumberFormatException e) {
-            throw new ExitingException(statement,
-                    "invalid double input (syscall " + this.getNumber() + ")");
+            throw new SimulationException(statement,
+                    "invalid double input (syscall " + this.getNumber() + ")", SimulationException.ENVIRONMENT_CALL);
         }
 
         FloatingPointRegisterFile.updateRegisterLong(10, Double.doubleToRawLongBits(doubleValue));

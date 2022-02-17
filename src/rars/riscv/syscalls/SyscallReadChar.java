@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.riscv.hardware.RegisterFile;
@@ -39,13 +39,13 @@ public class SyscallReadChar extends AbstractSyscall {
         super("ReadChar", "Reads a character from input console", "N/A", "a0 = the character");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         try {
             RegisterFile.updateRegister("a0", SystemIO.readChar(this.getNumber()));
         } catch (IndexOutOfBoundsException e) // means null input
         {
-            throw new ExitingException(statement,
-                    "invalid char input (syscall " + this.getNumber() + ")");
+            throw new SimulationException(statement,
+                    "invalid char input (syscall " + this.getNumber() + ")", SimulationException.ENVIRONMENT_CALL);
         }
     }
 

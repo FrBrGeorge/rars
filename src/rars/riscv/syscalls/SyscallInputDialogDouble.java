@@ -1,7 +1,7 @@
 package rars.riscv.syscalls;
 
 import rars.Globals;
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.hardware.AddressErrorException;
 import rars.riscv.hardware.FloatingPointRegisterFile;
@@ -53,7 +53,7 @@ public class SyscallInputDialogDouble extends AbstractSyscall {
     /**
      * System call to input data.
      */
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         // Input arguments: $a0 = address of null-terminated string that is the message to user
         // Outputs:
         //    fa0 value of double read. $f1 contains high order word of the double.
@@ -76,7 +76,7 @@ public class SyscallInputDialogDouble extends AbstractSyscall {
                 ch[0] = (char) Globals.memory.getByte(byteAddress);
             }
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
 
         // Values returned by Java's InputDialog:

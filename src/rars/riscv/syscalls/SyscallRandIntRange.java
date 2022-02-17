@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.riscv.hardware.RegisterFile;
@@ -41,13 +41,13 @@ public class SyscallRandIntRange extends AbstractSyscall {
                 "a0 = uniformly selectect from [0,bound]");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         Random stream = RandomStreams.get("a0");
         try {
             RegisterFile.updateRegister("a0", stream.nextInt(RegisterFile.getValue("a1")));
         } catch (IllegalArgumentException iae) {
-            throw new ExitingException(statement,
-                    "Upper bound of range cannot be negative (syscall " + this.getNumber() + ")");
+            throw new SimulationException(statement,
+                    "Upper bound of range cannot be negative (syscall " + this.getNumber() + ")", SimulationException.ENVIRONMENT_CALL);
         }
     }
 }

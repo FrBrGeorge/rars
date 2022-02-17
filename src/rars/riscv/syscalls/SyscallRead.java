@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
@@ -43,7 +43,7 @@ public class SyscallRead extends AbstractSyscall {
                 "a0 = the length read or -1 if error");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         int byteAddress = RegisterFile.getValue("a1"); // destination of characters read from file
         int index = 0;
         int length = RegisterFile.getValue("a2");
@@ -62,7 +62,7 @@ public class SyscallRead extends AbstractSyscall {
                         myBuffer[index++]);
             }
         } catch (AddressErrorException e) {
-            throw new ExitingException(statement, e);
+            throw new SimulationException(statement, "Cannot access address: " + e.getAddress(), SimulationException.ENVIRONMENT_CALL);
         }
     }
 }

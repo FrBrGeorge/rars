@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.util.SystemIO;
@@ -39,7 +39,7 @@ public class SyscallPrintString extends AbstractSyscall {
                 "a0 = the address of the string", "N/A");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         SystemIO.printString(NullString.get(statement));
     }
 }

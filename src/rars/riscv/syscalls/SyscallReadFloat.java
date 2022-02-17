@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
 import rars.riscv.hardware.FloatingPointRegisterFile;
@@ -39,13 +39,13 @@ public class SyscallReadFloat extends AbstractSyscall {
         super("ReadFloat", "Reads a float from input console", "N/A", "fa0 = the float");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         float floatValue;
         try {
             floatValue = SystemIO.readFloat(this.getNumber());
         } catch (NumberFormatException e) {
-            throw new ExitingException(statement,
-                    "invalid float input (syscall " + this.getNumber() + ")");
+            throw new SimulationException(statement,
+                    "invalid float input (syscall " + this.getNumber() + ")", SimulationException.ENVIRONMENT_CALL);
         }
         FloatingPointRegisterFile.updateRegister(10, Float.floatToRawIntBits(floatValue)); // TODO: update to string fa0
     }

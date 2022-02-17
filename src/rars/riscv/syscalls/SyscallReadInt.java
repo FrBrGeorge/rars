@@ -1,6 +1,6 @@
 package rars.riscv.syscalls;
 
-import rars.ExitingException;
+import rars.SimulationException;
 import rars.Globals;
 import rars.ProgramStatement;
 import rars.riscv.AbstractSyscall;
@@ -40,12 +40,12 @@ public class SyscallReadInt extends AbstractSyscall {
         super("ReadInt", "Reads an int from input console", "N/A", "a0 = the int");
     }
 
-    public void simulate(ProgramStatement statement) throws ExitingException {
+    public void simulate(ProgramStatement statement) throws SimulationException {
         try {
             RegisterFile.updateRegister("a0", SystemIO.readInteger(this.getNumber()));
         } catch (NumberFormatException e) {
-            throw new ExitingException(statement,
-                    "invalid integer input (syscall " + this.getNumber() + ")");
+            throw new SimulationException(statement,
+                    "invalid integer input (syscall " + this.getNumber() + ")", SimulationException.ENVIRONMENT_CALL);
         }
     }
 
