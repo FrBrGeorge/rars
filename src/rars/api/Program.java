@@ -57,7 +57,7 @@ public class Program {
         this.set = set;
         code = new RISCVprogram();
         assembled = new Memory();
-        simulation = new Memory();
+        simulation = Globals.memory;
     }
 
     /**
