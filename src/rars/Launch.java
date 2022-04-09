@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import rars.tools.HeadlessTimer;
 
 /*
 Copyright (c) 2003-2012,  Pete Sanderson and Kenneth Vollmar
@@ -81,6 +82,7 @@ public class Launch {
      * h  -- display help.  Use by itself and with no filename</br>
      * hex  -- display memory or register contents in hexadecimal (default)<br>
      * ic  -- display count of basic instructions 'executed'");
+     * ti -- start with timer turned on (see <tt>TimerTool</tt> documentation for more)<br>
      * mc  -- set memory configuration.  Option has 1 argument, e.g.<br>
      * <tt>mc &lt;config$gt;</tt>, where &lt;config$gt; is <tt>Default</tt><br>
      * for the RARS default 32-bit address space, <tt>CompactDataAtZero</tt> for<br>
@@ -131,6 +133,7 @@ public class Launch {
     private ArrayList<String> programArgumentList; // optional program args for program (becomes argc, argv)
     private int assembleErrorExitCode;  // RARS command exit code to return if assemble error occurs
     private int simulateErrorExitCode;// RARS command exit code to return if simulation error occurs
+    private HeadlessTimer timer = null; // Headless timer, if needed
 
     public static void main(String[] args){
         new Launch(args);
@@ -395,7 +398,11 @@ public class Launch {
                 countInstructions = true;
                 continue;
             }
-            
+            if (args[i].toLowerCase().equals("ti")) { // added Fri Apr  8 21:16:51 MSK 2022
+                timer = new HeadlessTimer();
+                continue;
+            }
+
             if (new File(args[i]).exists()) {  // is it a file name?
                 filenameList.add(args[i]);
                 continue;
@@ -501,6 +508,10 @@ public class Launch {
         if (simulate) {
             if (Globals.debug) {
                 out.println("--------  SIMULATION BEGINS  -----------");
+            }
+            if (timer != null) {
+                timer.start();
+                timer.play();
             }
             try {
                 while (true) {
@@ -715,6 +726,7 @@ public class Launch {
         out.println("Usage:  Rars  [options] filename [additional filenames]");
         out.println("  Valid options (not case sensitive, separate by spaces) are:");
         out.println("      a  -- assemble only, do not simulate");
+        out.println("     ti  -- start with timer turned on (see TimerTool documentation for more).");
         out.println("  ae<n>  -- terminate RARS with integer exit code <n> if an assemble error occurs.");
         out.println("  ascii  -- display memory or register contents interpreted as ASCII codes.");
         out.println("      b  -- brief - do not display register/memory address along with contents");
