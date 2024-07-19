@@ -1,6 +1,7 @@
 package rars.riscv.hardware;
 
 import rars.Globals;
+import rars.Settings;
 
 import java.util.Observer;
 
@@ -199,7 +200,10 @@ public class ControlAndStatusRegisterFile {
      **/
 
     public static long getValueLong(int num) {
-        return instance.getValue(num);
+        if (Globals.getSettings().getBooleanSetting(Settings.Bool.RV64_ENABLED))
+            return instance.getValue(num);
+        else
+            return (int)instance.getValue(num);
     }
     /**
      * Returns the value of the register
